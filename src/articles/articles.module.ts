@@ -1,7 +1,13 @@
-import { Module } from '@nestjs/common';
-import { ArticlesService } from './articles.service';
-
+import { ArticleService } from './articles.service';
+import { ArticleController } from './articles.controller';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { AuthMiddleware } from '../auth/auth.middleware';
 @Module({
-  providers: [ArticlesService],
+  controllers: [ArticleController],
+  providers: [ArticleService],
 })
-export class ArticlesModule {}
+export class ArticlesModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('api/v1/articles');
+  }
+}
