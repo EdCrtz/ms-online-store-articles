@@ -28,15 +28,15 @@ export class ArticleController {
   @Get()
   async findAllUser(@Response() res) {
     const user = res.locals.user;
-    const x = await this.articleService.findAll(user.id);
-    return res.status(HttpStatus.OK).send(x);
+    const responseDbArticle = await this.articleService.findAll(user.id);
+    return res.status(HttpStatus.OK).send(responseDbArticle);
   }
   // Busdcar todos los productos que no sean de el empleado actual
   @Get('find/all')
   async findArticlesOtherUsers(@Response() res): Promise<ArticleUser[]> {
     const user = res.locals.user;
-    const x = await this.articleService.findMany(user.id);
-    return res.status(HttpStatus.OK).send(x);
+    const responseDbArticle = await this.articleService.findMany(user.id);
+    return res.status(HttpStatus.OK).send(responseDbArticle);
   }
 
   @Get(':id')

@@ -11,7 +11,7 @@ export class ArticleService {
   }
 
   async findAll(userId: string): Promise<Article[]> {
-    const x = await this.prisma.article.findMany({
+    const responseDbArticle = await this.prisma.article.findMany({
       where: {
         user: {
           id: {
@@ -20,10 +20,10 @@ export class ArticleService {
         },
       },
     });
-    return x;
+    return responseDbArticle;
   }
   async findMany(userId: string): Promise<ArticleUser[]> {
-    const x = await this.prisma.article.findMany({
+    const responseDbArticle = await this.prisma.article.findMany({
       where: {
         user: {
           id: {
@@ -35,7 +35,7 @@ export class ArticleService {
         user: true,
       },
     });
-    return x;
+    return responseDbArticle;
   }
   async findOne(id: string): Promise<Article> {
     return this.prisma.article.findFirst({ where: { id } });
