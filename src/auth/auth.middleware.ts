@@ -22,10 +22,12 @@ export class AuthMiddleware implements NestMiddleware {
     }
     // Envia una petición al servicio de autenticación para validar el token
     try {
-      await axios.post('http://localhost:4000/auth/validate', {
+      const user = await axios.post('http://localhost:4000/auth/validate', {
         token,
       });
       // Asigna la información del usuario a una variable para utilizarla en el controlador
+      const userData = user.data.user;
+      res.locals.user = userData;
       next();
     } catch (error) {
       return res.status(401).json({ message: 'Invalid token' });

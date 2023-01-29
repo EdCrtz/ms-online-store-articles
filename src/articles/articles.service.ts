@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Article } from './articles';
 import { PrismaClient } from '@prisma/client';
+import { ArticleUser } from './articlesUser';
 @Injectable()
 export class ArticleService {
   prisma = new PrismaClient();
@@ -9,10 +10,33 @@ export class ArticleService {
     return this.prisma.article.create({ data: article });
   }
 
-  async findAll(): Promise<Article[]> {
-    return this.prisma.article.findMany();
+  async findAll(userId: string): Promise<Article[]> {
+    const x = await this.prisma.article.findMany({
+      where: {
+        user: {
+          id: {
+            equals: userId,
+          },
+        },
+      },
+    });
+    return x;
   }
-
+  async findMany(userId: string): Promise<ArticleUser[]> {
+    const x = await this.prisma.article.findMany({
+      where: {
+        user: {
+          id: {
+            not: userId,
+          },
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+    return x;
+  }
   async findOne(id: string): Promise<Article> {
     return this.prisma.article.findFirst({ where: { id } });
   }
